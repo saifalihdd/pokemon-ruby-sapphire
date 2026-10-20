@@ -1,0 +1,11 @@
+{
+  "name": "pokemon-ruby-sapphire",
+  "version": "0.1.0",
+  "description": "Pokemon Ruby & Sapphire - game CLI berbasis Node.js (Mini Project TSC Backend Basic)",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "node test/stage1.test.js && node test/stage2.test.js"
+  }
+}
