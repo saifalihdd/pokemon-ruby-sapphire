@@ -6,6 +6,7 @@ export const CONFIG = {
   startItems: [
     { itemId: "pokeball", qty: 5 },
     { itemId: "potion", qty: 2 },
+    { itemId: "expShare", qty: 1 },
   ],
   nurseHealCost: 0, // heal semua Pokemon di tim: gratis
   nurseReviveCost: 300, // revive per Pokemon pingsan: berbayar

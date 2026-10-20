@@ -25,7 +25,7 @@ export const createPokemon = (speciesId, level, nickname = null) => {
   const species = findSpecies(speciesId);
   if (!species) throw new Error(`Spesies ${speciesId} tidak ditemukan`);
   const maxHp = calcMaxHp(species.baseStats.hp, level);
-  return { uid: null, speciesId, nickname, level, exp: expForLevel(level), hp: maxHp, maxHp, stats: calcStats(species, level) };
+  return { uid: null, speciesId, nickname, level, exp: expForLevel(level), heldItem: null, hp: maxHp, maxHp, stats: calcStats(species, level) };
 };
 
 export const displayName = (pokemon) => pokemon.nickname ?? findSpecies(pokemon.speciesId).name;

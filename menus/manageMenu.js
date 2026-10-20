@@ -5,6 +5,7 @@ import { displayName } from "../services/pokemonFactory.js";
 import { renamePokemon, swapParty, depositPokemon, withdrawPokemon, releasePokemon, getAllPokemon } from "../services/trainerService.js";
 import { printPokemonDetail, formatPokemonLine } from "../ui/display.js";
 import { box } from "../ui/boxes.js";
+import { heldItemMenu } from "./heldItemMenu.js";
 
 const showList = (title, list) => {
   console.log(box(list.length ? list.map((p, i) => `${i + 1}. ${formatPokemonLine(p)}`) : ["(kosong)"], { title, minWidth: 60 }));
@@ -21,6 +22,7 @@ export const manageMenu = async (trainer) => {
       "Withdraw dari PC",
       "Ganti nickname",
       "Release Pokemon",
+      "Item pegangan (pasang / lepas Exp. Share)",
     ]);
 
     switch (choice) {
@@ -71,6 +73,9 @@ export const manageMenu = async (trainer) => {
         }
         break;
       }
+      case 9:
+        await heldItemMenu(trainer);
+        break;
       default:
         return;
     }

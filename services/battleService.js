@@ -157,13 +157,25 @@ const decideOrder = (battle, playerMoveId, foeMoveId) =>
 
 // ---------------------------------------------------------------- pingsan, EXP, giliran
 const awardExp = (battle, trainer, events) => {
-  const alive = battle.participants.filter((uid) => locatePokemon(trainer, uid)?.pokemon.hp > 0);
-  if (alive.length === 0) return;
+  const fighters = battle.participants.filter((uid) => locatePokemon(trainer, uid)?.pokemon.hp > 0);
+  // Pemegang Exp. Share (hanya yang di tim dan masih hidup) dapat bagian walau tidak bertarung.
+  const holders = trainer.party.filter((pokemon) => pokemon.hp > 0 && pokemon.heldItem === "expShare").map((pokemon) => pokemon.uid);
+  if (fighters.length === 0 && holders.length === 0) return;
+
   const total = calcExpYield(battle.foe, findSpecies(battle.foe.speciesId).baseStats, battle.kind === "trainer");
-  const each = Math.max(1, Math.floor(total / alive.length));
-  alive.forEach((uid) => {
-    const { levelsGained, pokemon } = grantExp(trainer, uid, each);
-    events.push(`${displayName(pokemon)} mendapat ${each} EXP!`);
+  // Aturan Gen 3: jika ada pemegang Exp. Share, separuh EXP untuk yang bertarung, separuh untuk pemegang.
+  const fighterPool = holders.length > 0 ? Math.floor(total / 2) : total;
+  const holderPool = total - fighterPool;
+
+  const gains = new Map();
+  const add = (uid, amount) => gains.set(uid, (gains.get(uid) ?? 0) + Math.max(1, amount));
+  fighters.forEach((uid) => add(uid, Math.floor(fighterPool / fighters.length)));
+  holders.forEach((uid) => add(uid, Math.floor(holderPool / holders.length)));
+
+  gains.forEach((amount, uid) => {
+    const { levelsGained, pokemon } = grantExp(trainer, uid, amount);
+    const viaShare = holders.includes(uid) && !fighters.includes(uid) ? " (Exp. Share)" : "";
+    events.push(`${displayName(pokemon)} mendapat ${amount} EXP!${viaShare}`);
     if (levelsGained > 0) events.push(`${displayName(pokemon)} naik ke level ${pokemon.level}!`);
     if (getEvolutionTarget(pokemon) && !battle.pendingEvolutions.includes(uid)) battle.pendingEvolutions.push(uid);
   });

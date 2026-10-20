@@ -3,6 +3,7 @@ import { showMenu, printResult, pickPokemon } from "./menuHelper.js";
 import { useItemOnPokemon } from "../services/inventoryService.js";
 import { getAllPokemon } from "../services/trainerService.js";
 import { handleEvolutions } from "./evolutionMenu.js";
+import { equipItem } from "../services/heldItemService.js";
 
 export const bagMenu = async (trainer) => {
   while (true) {
@@ -20,6 +21,11 @@ export const bagMenu = async (trainer) => {
     const item = entries[choice - 1];
     if (item.kind === "ball") {
       console.log(`✖ ${item.name} hanya bisa dipakai saat encounter Pokemon liar.`);
+      continue;
+    }
+    if (item.kind === "held") {
+      const holder = await pickPokemon(trainer.party, `Pasang ${item.name} ke siapa`);
+      if (holder) printResult(equipItem(trainer, item.id, holder.uid));
       continue;
     }
     const pokemon = await pickPokemon(getAllPokemon(trainer), `Pakai ${item.name} pada siapa`);

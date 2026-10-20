@@ -5,6 +5,15 @@ import { isValidNickname, isIndexInRange } from "../utils/validation.js";
 const ok = (message, extra = {}) => ({ ok: true, message, ...extra });
 const fail = (message) => ({ ok: false, message });
 
+// Mengembalikan item yang dipegang sebuah Pokemon ke tas (dipakai saat unequip / release).
+export const returnHeldItem = (trainer, pokemon) => {
+  if (!pokemon.heldItem) return;
+  const exists = trainer.inventory.some((entry) => entry.itemId === pokemon.heldItem);
+  trainer.inventory = exists
+    ? trainer.inventory.map((entry) => (entry.itemId === pokemon.heldItem ? { ...entry, qty: entry.qty + 1 } : entry))
+    : [...trainer.inventory, { itemId: pokemon.heldItem, qty: 1 }];
+};
+
 const addUnique = (list, value) => (list.includes(value) ? list : [...list, value]);
 
 // ---------- CREATE ----------
@@ -106,6 +115,7 @@ export const releasePokemon = (trainer, uid) => {
   if (found.where === "party" && trainer.party.length <= 1) {
     return fail("Tidak bisa melepas Pokemon terakhir di tim!");
   }
+  returnHeldItem(trainer, found.pokemon);
   trainer[found.where] = trainer[found.where].filter((p) => p.uid !== uid);
   return ok(`${displayName(found.pokemon)} dilepas ke alam liar. Selamat tinggal!`);
 };

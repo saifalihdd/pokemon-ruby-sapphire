@@ -1,5 +1,6 @@
 import { findSpecies } from "../data/pokedex.js";
 import { findMove, getMoveCategory } from "../data/moves.js";
+import { findItem } from "../data/items.js";
 import { displayName } from "../services/pokemonFactory.js";
 import { typeTag, bold, dim } from "./colors.js";
 import { hpBar } from "./bars.js";
@@ -12,10 +13,11 @@ export const formatPokemonLine = (pokemon) => {
   const species = findSpecies(pokemon.speciesId);
   const { level, hp, maxHp } = pokemon;
   const fainted = hp <= 0 ? " (PINGSAN)" : "";
+  const held = pokemon.heldItem ? dim(` ◆${findItem(pokemon.heldItem).name}`) : "";
   const nameText = pokemon.nickname ? `${pokemon.nickname} (${species.name})` : species.name;
   const typeText = species.type.map((t) => typeTag(t)).join("");
   const typePad = " ".repeat(Math.max(0, 16 - species.type.map((t) => `[${t}]`).join("").length));
-  return `${nameText.padEnd(22)} Lv${String(level).padEnd(3)} ${typeText}${typePad} ${hpBar(hp, maxHp, 10)} ${hp}/${maxHp}${fainted}`;
+  return `${nameText.padEnd(22)} Lv${String(level).padEnd(3)} ${typeText}${typePad} ${hpBar(hp, maxHp, 10)} ${hp}/${maxHp}${fainted}${held}`;
 };
 
 export const printPokemonDetail = (pokemon) => {
@@ -30,6 +32,7 @@ export const printPokemonDetail = (pokemon) => {
     `${bold(displayName(pokemon))}${pokemon.nickname ? ` (${species.name})` : ""}  #${species.id}  ${pokemon.uid ? dim(pokemon.uid) : ""}`,
     `Tipe  : ${species.type.map(typeTag).join(" ")}`,
     `Level : ${level}`,
+    `Item  : ${pokemon.heldItem ? findItem(pokemon.heldItem).name : "-"}`,
     `HP    : ${hpBar(hp, maxHp)} ${hp}/${maxHp}`,
     `ATK ${stats.atk}  DEF ${stats.def}  SpA ${stats.spAtk}  SpD ${stats.spDef}  SPD ${stats.speed}`,
     "Move  :",
