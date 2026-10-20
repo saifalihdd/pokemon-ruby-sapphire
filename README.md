@@ -18,6 +18,8 @@ di Ruby & Sapphire. Dari sana kamu bisa:
 - **Naik level dan berevolusi** (27 evolusi berbasis level, contoh Treecko → Grovyle → Sceptile).
 - **Menantang 8 Gym Hoenn** secara berurutan dan mengumpulkan badge.
 - **Mendapat uang dan item acak** dari setiap kemenangan, lalu membelanjakannya di **Poke Mart**.
+- **Exp. Share** (item pegangan Gen 3): ada di tas awal; dipasang ke Pokemon di tim agar pemegangnya mendapat
+  setengah EXP walau tidak bertarung. Bisa dipasang/dilepas lewat Tas atau Kelola Pokemon.
 - **Pokemon Center**: kelola tim dan PC, heal gratis di Nurse Joy (revive berbayar), dan belanja.
 - **Whiteout**: jika semua Pokemon pingsan, uang berkurang separuh dan tim pulih.
 - **Autosave** ke `savegame.json` setelah setiap battle dan aksi menu.
@@ -60,11 +62,11 @@ pokemon-ruby-sapphire/
 │   ├── trainerService.js   inventoryService.js   shopService.js
 │   ├── nurseService.js     encounterService.js   battleService.js
 │   ├── levelingService.js  evolutionService.js   rewardService.js
-│   ├── gymService.js       pokemonFactory.js
+│   ├── gymService.js       heldItemService.js    pokemonFactory.js
 ├── menus/                  # alur menu & I/O terminal
 ├── ui/                     # warna, HP bar, kotak, animasi
 ├── utils/                  # input (readline), storage (JSON), validasi, RNG
-└── test/                   # tes otomatis (stage1, stage2)
+└── test/                   # tes otomatis (stage1, stage2, stage3)
 ```
 
 Pemisahan `services/` (logika) dan `menus/` (input/output) membuat logika bisa dites tanpa terminal.
@@ -89,7 +91,7 @@ Semua data utama berupa **Array of Objects**.
 **Pokemon milik trainer** (elemen `party` / `pc`):
 
 ```js
-{ uid: "P001", speciesId: 252, nickname: "Rex", level: 16, exp: 4096,
+{ uid: "P001", speciesId: 252, nickname: "Rex", level: 16, exp: 4096, heldItem: "expShare", // atau null
   hp: 52, maxHp: 52, stats: { atk, def, spAtk, spDef, speed } }
 ```
 
@@ -124,6 +126,7 @@ Semua data utama berupa **Array of Objects**.
 | | `getQty`, `getCatalog`, `listGyms`, `getGymStatus` | Membaca tas, katalog toko, status gym |
 | | menu Kelola Pokemon, Trainer Card, Pokedex, Tas | Menampilkan data ke terminal |
 | **Update** | `updatePokemon`, `renamePokemon`, `swapParty` | Mengubah data Pokemon (immutable: objek baru lewat spread) |
+| | `equipItem`, `unequipItem` (heldItemService) | Memasang/melepas item pegangan (Exp. Share); item pindah antara tas dan Pokemon |
 | | `depositPokemon`, `withdrawPokemon` | Memindahkan Pokemon antara tim dan PC |
 | | `healParty`, `revivePokemon`, `useItemOnPokemon` | Memulihkan HP, menghidupkan, memakai item |
 | | `grantExp`, `evolvePokemon` | Menambah EXP, naik level, dan berevolusi |
