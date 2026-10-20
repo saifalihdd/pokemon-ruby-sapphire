@@ -1,0 +1,32 @@
+// Bentuk evolusi (stat dasar asli Gen 3). Move tetap 4 per spesies, seperti spesies lain.
+const stats = (hp, atk, def, spAtk, spDef, speed) => ({ hp, atk, def, spAtk, spDef, speed });
+
+export const evolvedSpecies = [
+  { id: 42, name: "Golbat", type: ["Poison", "Flying"], baseStats: stats(75, 80, 70, 65, 75, 90), catchRate: 90, moves: ["bite", "wingAttack", "leechLife", "sludgeBomb"] },
+  { id: 75, name: "Graveler", type: ["Rock", "Ground"], baseStats: stats(55, 95, 115, 45, 45, 35), catchRate: 120, moves: ["rockThrow", "rockSlide", "earthquake", "defenseCurl"] },
+  { id: 253, name: "Grovyle", type: ["Grass"], baseStats: stats(50, 65, 45, 85, 65, 95), catchRate: 45, moves: ["quickAttack", "megaDrain", "slash", "agility"] },
+  { id: 254, name: "Sceptile", type: ["Grass"], baseStats: stats(70, 85, 65, 105, 85, 120), catchRate: 45, moves: ["leafBlade", "slash", "megaDrain", "agility"] },
+  { id: 256, name: "Combusken", type: ["Fire", "Fighting"], baseStats: stats(60, 85, 60, 85, 60, 55), catchRate: 45, moves: ["ember", "slash", "peck", "growl"] },
+  { id: 257, name: "Blaziken", type: ["Fire", "Fighting"], baseStats: stats(80, 120, 70, 110, 70, 80), catchRate: 45, moves: ["flamethrower", "skyUppercut", "slash", "swordsDance"] },
+  { id: 259, name: "Marshtomp", type: ["Water", "Ground"], baseStats: stats(70, 85, 70, 60, 70, 50), catchRate: 45, moves: ["waterGun", "mudSlap", "bodySlam", "growl"] },
+  { id: 260, name: "Swampert", type: ["Water", "Ground"], baseStats: stats(100, 110, 90, 85, 90, 60), catchRate: 45, moves: ["surf", "earthquake", "bodySlam", "mudSlap"] },
+  { id: 262, name: "Mightyena", type: ["Dark"], baseStats: stats(70, 90, 70, 60, 60, 70), catchRate: 127, moves: ["bite", "crunch", "howl", "headbutt"] },
+  { id: 264, name: "Linoone", type: ["Normal"], baseStats: stats(78, 70, 61, 50, 61, 100), catchRate: 90, moves: ["slash", "headbutt", "sandAttack", "growl"] },
+  { id: 271, name: "Lombre", type: ["Water", "Grass"], baseStats: stats(60, 50, 50, 60, 70, 50), catchRate: 120, moves: ["astonish", "waterGun", "megaDrain", "growl"] },
+  { id: 274, name: "Nuzleaf", type: ["Grass", "Dark"], baseStats: stats(70, 70, 40, 60, 40, 60), catchRate: 120, moves: ["slash", "megaDrain", "bite", "harden"] },
+  { id: 277, name: "Swellow", type: ["Normal", "Flying"], baseStats: stats(60, 85, 60, 50, 50, 125), catchRate: 45, moves: ["aerialAce", "wingAttack", "quickAttack", "growl"] },
+  { id: 279, name: "Pelipper", type: ["Water", "Flying"], baseStats: stats(60, 50, 100, 85, 70, 65), catchRate: 45, moves: ["waterGun", "wingAttack", "surf", "quickAttack"] },
+  { id: 281, name: "Kirlia", type: ["Psychic"], baseStats: stats(38, 35, 35, 65, 55, 50), catchRate: 120, moves: ["confusion", "doubleTeam", "quickAttack", "growl"] },
+  { id: 282, name: "Gardevoir", type: ["Psychic"], baseStats: stats(68, 65, 65, 125, 115, 80), catchRate: 45, moves: ["psychic", "shadowBall", "doubleTeam", "quickAttack"] },
+  { id: 284, name: "Masquerain", type: ["Bug", "Flying"], baseStats: stats(70, 60, 62, 80, 82, 60), catchRate: 75, moves: ["waterGun", "wingAttack", "leechLife", "quickAttack"] },
+  { id: 286, name: "Breloom", type: ["Grass", "Fighting"], baseStats: stats(60, 130, 80, 60, 60, 70), catchRate: 90, moves: ["brickBreak", "megaDrain", "headbutt", "leer"] },
+  { id: 288, name: "Vigoroth", type: ["Normal"], baseStats: stats(80, 80, 80, 55, 55, 90), catchRate: 120, moves: ["scratch", "slash", "headbutt", "growl"] },
+  { id: 289, name: "Slaking", type: ["Normal"], baseStats: stats(150, 160, 100, 95, 65, 100), catchRate: 45, moves: ["bodySlam", "slash", "headbutt", "swordsDance"] },
+  { id: 297, name: "Hariyama", type: ["Fighting"], baseStats: stats(144, 120, 60, 40, 60, 50), catchRate: 200, moves: ["armThrust", "brickBreak", "bodySlam", "leer"] },
+  { id: 305, name: "Lairon", type: ["Steel", "Rock"], baseStats: stats(60, 90, 140, 50, 50, 40), catchRate: 90, moves: ["headbutt", "ironTail", "rockThrow", "harden"] },
+  { id: 308, name: "Medicham", type: ["Fighting", "Psychic"], baseStats: stats(60, 60, 75, 60, 75, 80), catchRate: 90, moves: ["brickBreak", "psychic", "confusion", "leer"] },
+  { id: 310, name: "Manectric", type: ["Electric"], baseStats: stats(70, 75, 60, 105, 60, 105), catchRate: 45, moves: ["thunderbolt", "bite", "quickAttack", "leer"] },
+  { id: 317, name: "Swalot", type: ["Poison"], baseStats: stats(100, 73, 83, 73, 83, 55), catchRate: 75, moves: ["sludgeBomb", "acid", "bodySlam", "lick"] },
+  { id: 321, name: "Wailord", type: ["Water"], baseStats: stats(170, 90, 45, 90, 45, 60), catchRate: 60, moves: ["waterGun", "surf", "bodySlam", "defenseCurl"] },
+  { id: 323, name: "Camerupt", type: ["Fire", "Ground"], baseStats: stats(70, 100, 70, 105, 75, 40), catchRate: 150, moves: ["ember", "flamethrower", "earthquake", "headbutt"] },
+];
