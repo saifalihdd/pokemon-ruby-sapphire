@@ -3,6 +3,7 @@ import { typeTag, bold, dim } from "../ui/colors.js";
 import { box } from "../ui/boxes.js";
 import { formatMoney } from "../ui/display.js";
 import { CONFIG } from "../data/config.js";
+import { isEquipped } from "../services/equipmentService.js";
 
 export const showTrainerCard = (trainer) => {
   const badgeSlots = Array.from({ length: 8 }, (_, i) => (i < trainer.badges.length ? "●" : "○")).join(" ");
@@ -16,6 +17,7 @@ export const showTrainerCard = (trainer) => {
         ...(trainer.badges.length ? [`           ${trainer.badges.join(", ")}`] : []),
         `Pokedex  : dilihat ${trainer.pokedexSeen.length}, ditangkap ${trainer.pokedexCaught.length} / ${pokedex.length}`,
         `Pokemon  : tim ${trainer.party.length}/${CONFIG.partyMax}, PC ${trainer.pc.length} (total ${total})`,
+        `Exp Share: ${isEquipped(trainer, "expShare") ? "AKTIF (seluruh tim dapat EXP)" : "nonaktif"}`,
       ],
       { title: "TRAINER CARD", minWidth: 44 },
     ),

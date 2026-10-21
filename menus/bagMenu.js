@@ -3,7 +3,7 @@ import { showMenu, printResult, pickPokemon } from "./menuHelper.js";
 import { useItemOnPokemon } from "../services/inventoryService.js";
 import { getAllPokemon } from "../services/trainerService.js";
 import { handleEvolutions } from "./evolutionMenu.js";
-import { equipItem } from "../services/heldItemService.js";
+import { toggleEquip, isEquipped } from "../services/equipmentService.js";
 
 export const bagMenu = async (trainer) => {
   while (true) {
@@ -14,7 +14,7 @@ export const bagMenu = async (trainer) => {
     }
     const choice = await showMenu(
       "TAS (pilih item untuk dipakai)",
-      entries.map((item) => `${item.name.padEnd(14)} x${String(item.qty).padEnd(3)} ${item.description}`),
+      entries.map((item) => `${item.name.padEnd(14)} x${String(item.qty).padEnd(3)} ${isEquipped(trainer, item.id) ? "[AKTIF] " : ""}${item.description}`),
     );
     if (choice === 0) return;
 
@@ -23,9 +23,8 @@ export const bagMenu = async (trainer) => {
       console.log(`✖ ${item.name} hanya bisa dipakai saat encounter Pokemon liar.`);
       continue;
     }
-    if (item.kind === "held") {
-      const holder = await pickPokemon(trainer.party, `Pasang ${item.name} ke siapa`);
-      if (holder) printResult(equipItem(trainer, item.id, holder.uid));
+    if (item.kind === "equip") {
+      printResult(toggleEquip(trainer, item.id)); // pilih lagi untuk melepas
       continue;
     }
     const pokemon = await pickPokemon(getAllPokemon(trainer), `Pakai ${item.name} pada siapa`);

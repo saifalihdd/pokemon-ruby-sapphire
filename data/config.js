@@ -15,6 +15,7 @@ export const CONFIG = {
   textDelayMs: Number(process.env.TEXT_DELAY ?? 600), // jeda animasi (0 = instan)
   saveFile: "savegame.json",
   // --- battle & ekonomi (Tahap 2)
+  expShareRatio: 0.5, // saat Exp. Share aktif: Pokemon yang tidak bertarung dapat 50% dari bagian yang bertarung
   expMultiplier: 2, // pengali EXP agar progres tidak terlalu lama
   wildMoneyPerLevel: 15, // uang dari Pokemon liar = level x ini
   gymMoneyPerLevel: 100, // uang gym = level Pokemon terakhir x ini

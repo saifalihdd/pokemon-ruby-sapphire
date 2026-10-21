@@ -11,6 +11,8 @@ import { removeItem, useItemOnPokemon, getQty } from "./inventoryService.js";
 import { attemptCatch } from "./encounterService.js";
 import { grantExp, calcExpYield } from "./levelingService.js";
 import { getEvolutionTarget } from "./evolutionService.js";
+import { isEquipped } from "./equipmentService.js";
+import { CONFIG } from "../data/config.js";
 import { rollWildReward, rollGymReward, applyReward } from "./rewardService.js";
 import { applyWhiteout } from "./nurseService.js";
 
@@ -158,23 +160,21 @@ const decideOrder = (battle, playerMoveId, foeMoveId) =>
 // ---------------------------------------------------------------- pingsan, EXP, giliran
 const awardExp = (battle, trainer, events) => {
   const fighters = battle.participants.filter((uid) => locatePokemon(trainer, uid)?.pokemon.hp > 0);
-  // Pemegang Exp. Share (hanya yang di tim dan masih hidup) dapat bagian walau tidak bertarung.
-  const holders = trainer.party.filter((pokemon) => pokemon.hp > 0 && pokemon.heldItem === "expShare").map((pokemon) => pokemon.uid);
-  if (fighters.length === 0 && holders.length === 0) return;
+  if (fighters.length === 0) return;
 
   const total = calcExpYield(battle.foe, findSpecies(battle.foe.speciesId).baseStats, battle.kind === "trainer");
-  // Aturan Gen 3: jika ada pemegang Exp. Share, separuh EXP untuk yang bertarung, separuh untuk pemegang.
-  const fighterPool = holders.length > 0 ? Math.floor(total / 2) : total;
-  const holderPool = total - fighterPool;
+  const perFighter = Math.max(1, Math.floor(total / fighters.length));
 
-  const gains = new Map();
-  const add = (uid, amount) => gains.set(uid, (gains.get(uid) ?? 0) + Math.max(1, amount));
-  fighters.forEach((uid) => add(uid, Math.floor(fighterPool / fighters.length)));
-  holders.forEach((uid) => add(uid, Math.floor(holderPool / holders.length)));
+  const gains = new Map(fighters.map((uid) => [uid, perFighter]));
+  // Exp. Share aktif: Pokemon hidup di TIM (bukan PC) yang tidak bertarung ikut dapat sebagian.
+  if (isEquipped(trainer, "expShare")) {
+    const shared = Math.max(1, Math.floor(perFighter * CONFIG.expShareRatio));
+    trainer.party.filter((pokemon) => pokemon.hp > 0 && !fighters.includes(pokemon.uid)).forEach((pokemon) => gains.set(pokemon.uid, shared));
+  }
 
   gains.forEach((amount, uid) => {
     const { levelsGained, pokemon } = grantExp(trainer, uid, amount);
-    const viaShare = holders.includes(uid) && !fighters.includes(uid) ? " (Exp. Share)" : "";
+    const viaShare = fighters.includes(uid) ? "" : " (Exp. Share)";
     events.push(`${displayName(pokemon)} mendapat ${amount} EXP!${viaShare}`);
     if (levelsGained > 0) events.push(`${displayName(pokemon)} naik ke level ${pokemon.level}!`);
     if (getEvolutionTarget(pokemon) && !battle.pendingEvolutions.includes(uid)) battle.pendingEvolutions.push(uid);
