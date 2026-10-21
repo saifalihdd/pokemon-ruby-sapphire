@@ -49,6 +49,10 @@ export const moves = [
   { id: "rockSlide", name: "Rock Slide", type: "Rock", power: 75, accuracy: 90 },
   { id: "ironTail", name: "Iron Tail", type: "Steel", power: 100, accuracy: 75 },
   { id: "sludgeBomb", name: "Sludge Bomb", type: "Poison", power: 90, accuracy: 100 },
+  { id: "fireBlast", name: "Fire Blast", type: "Fire", power: 120, accuracy: 85 },
+  { id: "hydroPump", name: "Hydro Pump", type: "Water", power: 120, accuracy: 80 },
+  { id: "iceBeam", name: "Ice Beam", type: "Ice", power: 95, accuracy: 100 },
+  { id: "dragonClaw", name: "Dragon Claw", type: "Dragon", power: 80, accuracy: 100 },
   { id: "swordsDance", name: "Swords Dance", type: "Normal", power: 0, accuracy: 100, effect: { kind: "statChange", target: "self", stat: "atk", stages: 2 } },
   { id: "agility", name: "Agility", type: "Psychic", power: 0, accuracy: 100, effect: { kind: "statChange", target: "self", stat: "speed", stages: 2 } },
 ];

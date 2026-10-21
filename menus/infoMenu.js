@@ -4,20 +4,25 @@ import { box } from "../ui/boxes.js";
 import { formatMoney } from "../ui/display.js";
 import { CONFIG } from "../data/config.js";
 import { isEquipped } from "../services/equipmentService.js";
+import { countCaughtLegendaries } from "../services/legendaryService.js";
+import { legendaries } from "../data/legendaries.js";
 
 export const showTrainerCard = (trainer) => {
   const badgeSlots = Array.from({ length: 8 }, (_, i) => (i < trainer.badges.length ? "●" : "○")).join(" ");
   const total = trainer.party.length + trainer.pc.length;
+  // Nama badge dipecah per 3 agar kotak tidak melebar saat badge sudah banyak.
+  const badgeNameLines = Array.from({ length: Math.ceil(trainer.badges.length / 3) }, (_, i) => `           ${trainer.badges.slice(i * 3, i * 3 + 3).join(", ")}`);
   console.log(
     box(
       [
         `Trainer  : ${bold(trainer.name)}`,
         `Uang     : ${formatMoney(trainer.money)}`,
         `Badge    : ${badgeSlots}  (${trainer.badges.length}/8)`,
-        ...(trainer.badges.length ? [`           ${trainer.badges.join(", ")}`] : []),
+        ...badgeNameLines,
         `Pokedex  : dilihat ${trainer.pokedexSeen.length}, ditangkap ${trainer.pokedexCaught.length} / ${pokedex.length}`,
         `Pokemon  : tim ${trainer.party.length}/${CONFIG.partyMax}, PC ${trainer.pc.length} (total ${total})`,
         `Exp Share: ${isEquipped(trainer, "expShare") ? "AKTIF (seluruh tim dapat EXP)" : "nonaktif"}`,
+        `Legendary: ${countCaughtLegendaries(trainer)}/${legendaries.length} tertangkap`,
       ],
       { title: "TRAINER CARD", minWidth: 44 },
     ),

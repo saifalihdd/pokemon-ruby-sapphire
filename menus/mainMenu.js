@@ -3,6 +3,7 @@ import { centerMenu } from "./centerMenu.js";
 import { exploreMenu } from "./exploreMenu.js";
 import { bagMenu } from "./bagMenu.js";
 import { gymMenu } from "./gymMenu.js";
+import { legendaryMenu } from "./legendaryMenu.js";
 import { showTrainerCard, showPokedex } from "./infoMenu.js";
 import { saveGame } from "../utils/storage.js";
 
@@ -10,7 +11,7 @@ export const mainMenu = async (trainer) => {
   while (true) {
     const choice = await showMenu(
       `MENU UTAMA - ${trainer.name}`,
-      ["Jelajah (cari Pokemon liar)", "Tantang Gym", "Pokemon Center", "Trainer Card", "Tas", "Pokedex", "Simpan game"],
+      ["Jelajah (cari Pokemon liar)", "Tantang Gym", "Lokasi Legendary (butuh 8 badge)", "Pokemon Center", "Trainer Card", "Tas", "Pokedex", "Simpan game"],
       "Simpan & Keluar",
     );
     switch (choice) {
@@ -21,18 +22,21 @@ export const mainMenu = async (trainer) => {
         await gymMenu(trainer);
         break;
       case 3:
-        await centerMenu(trainer);
+        await legendaryMenu(trainer);
         break;
       case 4:
-        showTrainerCard(trainer);
+        await centerMenu(trainer);
         break;
       case 5:
-        await bagMenu(trainer);
+        showTrainerCard(trainer);
         break;
       case 6:
-        showPokedex(trainer);
+        await bagMenu(trainer);
         break;
       case 7:
+        showPokedex(trainer);
+        break;
+      case 8:
         saveGame(trainer);
         console.log("✔ Game tersimpan.");
         break;

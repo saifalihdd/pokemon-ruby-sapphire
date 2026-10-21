@@ -1,4 +1,5 @@
 import { evolvedSpecies } from "./evolvedSpecies.js";
+import { legendarySpecies } from "./legendarySpecies.js";
 
 // 25 spesies dasar Hoenn + bentuk evolusinya (evolvedSpecies.js). baseStats memakai nilai asli Gen 3.
 const stats = (hp, atk, def, spAtk, spDef, speed) => ({ hp, atk, def, spAtk, spDef, speed });
@@ -31,7 +32,7 @@ const baseSpecies = [
   { id: 322, name: "Numel", type: ["Fire", "Ground"], baseStats: stats(60, 60, 40, 65, 45, 35), catchRate: 255, moves: ["tackle", "growl", "ember", "mudSlap"] },
 ];
 
-export const pokedex = [...baseSpecies, ...evolvedSpecies];
+export const pokedex = [...baseSpecies, ...evolvedSpecies, ...legendarySpecies];
 
 export const findSpecies = (id) => pokedex.find((species) => species.id === id);
 export const getStarters = () => pokedex.filter((species) => species.starter);

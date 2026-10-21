@@ -26,7 +26,7 @@ export const renderBattle = (battle) => {
   const foeName = findSpecies(battle.foe.speciesId).name;
   const foeLines = pokemonLines(battle.foe, foeName, battle.stages.foe);
   if (battle.kind === "trainer") foeLines.push(dim(`Sisa Pokemon lawan: ${"● ".repeat(foesRemaining(battle) + 1).trim()}`));
-  const foeTitle = battle.kind === "wild" ? "POKEMON LIAR" : `${battle.gym.leader.toUpperCase()}  (${battle.gym.type})`;
+  const foeTitle = battle.legendaryId ? "LEGENDARY" : battle.kind === "wild" ? "POKEMON LIAR" : `${battle.gym.leader.toUpperCase()}  (${battle.gym.type})`;
 
   console.log();
   console.log(box(foeLines, { title: foeTitle, minWidth: 50 }));

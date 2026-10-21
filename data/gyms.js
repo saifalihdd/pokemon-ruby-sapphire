@@ -21,7 +21,7 @@ export const gyms = [
   { order: 7, city: "Mossdeep City", leader: "Tate & Liza", type: "Psychic", badge: "Mind Badge",
     quote: "Kami berdua adalah satu pikiran!",
     team: [{ speciesId: 281, level: 36 }, { speciesId: 308, level: 38 }, { speciesId: 282, level: 41 }] },
-  { order: 8, city: "Sootopolis City", leader: "Juan", type: "Water", badge: "Rain Badge",
+  { order: 8, city: "Sootopolis City", leader: "Juan", type: "Water", badge: "Rain Badge", bonusItemId: "masterBall",
     quote: "Air menyimpan keindahan dan kekuatan. Tunjukkan padaku!",
     team: [{ speciesId: 279, level: 41 }, { speciesId: 284, level: 41 }, { speciesId: 321, level: 43 }, { speciesId: 260, level: 46 }] },
 ];

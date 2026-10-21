@@ -2,6 +2,8 @@
 export const items = [
   { id: "pokeball", name: "Poke Ball", kind: "ball", price: 200, ballBonus: 1, description: "Bola untuk menangkap Pokemon liar." },
   { id: "greatball", name: "Great Ball", kind: "ball", price: 600, ballBonus: 1.5, description: "Bola dengan peluang tangkap lebih baik." },
+  { id: "ultraBall", name: "Ultra Ball", kind: "ball", price: 1200, ballBonus: 2, description: "Bola dengan peluang tangkap 2x lipat." },
+  { id: "masterBall", name: "Master Ball", kind: "ball", price: 0, ballBonus: 255, guaranteed: true, description: "Pasti menangkap Pokemon apa pun. Hadiah menamatkan 8 gym." },
   { id: "potion", name: "Potion", kind: "heal", price: 300, heal: 20, description: "Memulihkan 20 HP." },
   { id: "superPotion", name: "Super Potion", kind: "heal", price: 700, heal: 50, description: "Memulihkan 50 HP." },
   { id: "revive", name: "Revive", kind: "revive", price: 1500, description: "Menghidupkan Pokemon pingsan dengan setengah HP." },

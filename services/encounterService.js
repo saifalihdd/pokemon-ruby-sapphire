@@ -27,7 +27,7 @@ export const calcCatchValue = (wild, ball) => {
 // Hasil: { caught, shakes } — shakes = berapa kali bola bergoyang (0-3).
 export const attemptCatch = (wild, ball) => {
   const a = calcCatchValue(wild, ball);
-  if (a >= 255) return { caught: true, shakes: 3 };
+  if (ball.guaranteed || a >= 255) return { caught: true, shakes: 3 };
   const b = Math.floor(1048560 / Math.sqrt(Math.sqrt(16711680 / a)));
   for (let shake = 0; shake < 4; shake++) {
     if (randInt(0, 65535) >= b) return { caught: false, shakes: shake };

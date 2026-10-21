@@ -7,7 +7,7 @@ import { typeEffectiveness } from "../data/typeChart.js";
 import { chance, randInt } from "../utils/random.js";
 import { displayName } from "./pokemonFactory.js";
 import { locatePokemon, updatePokemon, addPokemon, isPartyWiped } from "./trainerService.js";
-import { removeItem, useItemOnPokemon, getQty } from "./inventoryService.js";
+import { addItem, removeItem, useItemOnPokemon, getQty } from "./inventoryService.js";
 import { attemptCatch } from "./encounterService.js";
 import { grantExp, calcExpYield } from "./levelingService.js";
 import { getEvolutionTarget } from "./evolutionService.js";
@@ -52,13 +52,14 @@ export const calcDamage = (attacker, defender, move, attackerStages, defenderSta
 };
 
 // ---------------------------------------------------------------- setup
-export const createBattle = (trainer, foeTeam, { kind = "wild", foeName = null, gym = null, rematch = false } = {}) => {
+export const createBattle = (trainer, foeTeam, { kind = "wild", foeName = null, gym = null, rematch = false, legendaryId = null } = {}) => {
   const lead = trainer.party.find((pokemon) => pokemon.hp > 0);
   return {
     kind, // "wild" | "trainer"
     foeName,
     gym,
     rematch,
+    legendaryId, // id legendary jika ini encounter legendary
     foeTeam: foeTeam.map((pokemon) => ({ ...pokemon })),
     foeIndex: 0,
     foe: { ...foeTeam[0] }, // salinan kerja Pokemon lawan yang sedang aktif
@@ -344,6 +345,11 @@ export const resolveTurn = (battle, trainer, action) => {
 };
 
 // ---------------------------------------------------------------- akhir battle
+// Mencatat nasib legendary di data trainer: "caught" (tertangkap) atau "defeated" (hilang selamanya).
+const markLegendary = (trainer, id, status) => {
+  trainer.legendaries = { ...(trainer.legendaries ?? {}), [id]: status };
+};
+
 // Menerapkan hadiah / badge / whiteout. Dipanggil sekali setelah battle.over.
 export const concludeBattle = (battle, trainer) => {
   if (battle.result === "win") {
@@ -351,8 +357,13 @@ export const concludeBattle = (battle, trainer) => {
     applyReward(trainer, reward);
     const newBadge = battle.gym && !battle.rematch && !trainer.badges.includes(battle.gym.badge) ? battle.gym.badge : null;
     if (newBadge) trainer.badges = [...trainer.badges, newBadge];
-    return { outcome: "win", reward, newBadge };
+    // Hadiah khusus gym (mis. Master Ball dari gym 8) hanya diberikan saat badge pertama kali didapat.
+    const bonusItemId = newBadge ? battle.gym.bonusItemId ?? null : null;
+    if (bonusItemId) addItem(trainer, bonusItemId, 1);
+    if (battle.legendaryId && CONFIG.legendaryPermanent) markLegendary(trainer, battle.legendaryId, "defeated");
+    return { outcome: "win", reward, newBadge, bonusItemId };
   }
   if (battle.result === "lose") return { outcome: "lose", ...applyWhiteout(trainer) };
+  if (battle.result === "caught" && battle.legendaryId) markLegendary(trainer, battle.legendaryId, "caught");
   return { outcome: battle.result };
 };

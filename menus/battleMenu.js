@@ -2,6 +2,7 @@ import { ask, askConfirm } from "../utils/input.js";
 import { findSpecies } from "../data/pokedex.js";
 import { findMove, getMoveCategory } from "../data/moves.js";
 import { findItem } from "../data/items.js";
+import { CONFIG } from "../data/config.js";
 import { showMenu, printResult, pickPokemon } from "./menuHelper.js";
 import { handleEvolutions } from "./evolutionMenu.js";
 import { resolveTurn, concludeBattle } from "../services/battleService.js";
@@ -91,7 +92,9 @@ const offerNickname = async (trainer, pokemon) => {
 
 // Menjalankan satu battle sampai selesai. Mengembalikan hasil akhir ("win" | "lose" | "caught" | "ran").
 export const runBattle = async (trainer, battle) => {
-  if (battle.kind === "wild") {
+  if (battle.legendaryId) {
+    console.log(`\nAura luar biasa memenuhi udara... ${findSpecies(battle.foe.speciesId).name} legendaris muncul!`);
+  } else if (battle.kind === "wild") {
     console.log(`\nSeekor ${findSpecies(battle.foe.speciesId).name} liar muncul!`);
   } else {
     console.log(`\n${battle.gym.leader}: "${battle.gym.quote}"`);
@@ -119,12 +122,15 @@ export const runBattle = async (trainer, battle) => {
       console.log(battle.kind === "wild" ? "\n★ Kamu menang! ★" : `\n★ Kamu mengalahkan ${battle.foeName}! ★`);
       console.log(`Hadiah: ${describeReward(summary.reward)}`);
       if (summary.newBadge) console.log(`★ Kamu mendapat ${summary.newBadge}! ★`);
+      if (summary.bonusItemId) console.log(`★ Bonus menamatkan gym: ${findItem(summary.bonusItemId).name}! ★`);
+      if (battle.legendaryId && CONFIG.legendaryPermanent) console.log("Legendary itu menghilang selamanya...");
       break;
     case "lose":
       console.log("\nSemua Pokemon-mu pingsan... Matamu menjadi gelap!");
       console.log(`Kamu kehilangan ₽${summary.lost} dan dibawa ke Pokemon Center. Timmu sudah pulih.`);
       break;
     case "caught":
+      if (battle.legendaryId) console.log(`\n★★★ ${findSpecies(battle.foe.speciesId).name} legendaris berhasil ditangkap! ★★★`);
       console.log(`${displayName(battle.caught.pokemon)} ${battle.caught.destination === "party" ? "bergabung ke timmu!" : "dikirim ke PC (tim penuh)."}`);
       await offerNickname(trainer, battle.caught.pokemon);
       break;
