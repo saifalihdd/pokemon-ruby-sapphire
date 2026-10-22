@@ -4,7 +4,7 @@ import { exploreMenu } from "./exploreMenu.js";
 import { bagMenu } from "./bagMenu.js";
 import { gymMenu } from "./gymMenu.js";
 import { legendaryMenu } from "./legendaryMenu.js";
-import { showTrainerCard, showPokedex } from "./infoMenu.js";
+import { showTrainerCard, showPokedex, announcePokedexRewards } from "./infoMenu.js";
 import { saveGame } from "../utils/storage.js";
 
 export const mainMenu = async (trainer) => {
@@ -34,6 +34,7 @@ export const mainMenu = async (trainer) => {
         await bagMenu(trainer);
         break;
       case 7:
+        announcePokedexRewards(trainer);
         showPokedex(trainer);
         break;
       case 8:

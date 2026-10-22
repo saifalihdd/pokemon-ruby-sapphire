@@ -3,6 +3,7 @@ import { showMenu, printResult, pickPokemon } from "./menuHelper.js";
 import { useItemOnPokemon } from "../services/inventoryService.js";
 import { getAllPokemon } from "../services/trainerService.js";
 import { handleEvolutions } from "./evolutionMenu.js";
+import { announcePokedexRewards } from "./infoMenu.js";
 import { toggleEquip, isEquipped } from "../services/equipmentService.js";
 
 export const bagMenu = async (trainer) => {
@@ -31,6 +32,9 @@ export const bagMenu = async (trainer) => {
     if (!pokemon) continue;
     const result = useItemOnPokemon(trainer, item.id, pokemon.uid);
     printResult(result);
-    if (result.ok && item.kind === "candy") await handleEvolutions(trainer, [pokemon.uid]);
+    if (result.ok && item.kind === "candy") {
+      await handleEvolutions(trainer, [pokemon.uid]);
+      announcePokedexRewards(trainer);
+    }
   }
 };

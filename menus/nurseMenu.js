@@ -1,6 +1,6 @@
 import { CONFIG } from "../data/config.js";
 import { showMenu, printResult, pickPokemon } from "./menuHelper.js";
-import { healParty, revivePokemon } from "../services/nurseService.js";
+import { healParty, revivePokemon, reviveAll } from "../services/nurseService.js";
 import { isFainted } from "../services/pokemonFactory.js";
 import { formatMoney } from "../ui/display.js";
 
@@ -10,6 +10,7 @@ export const nurseMenu = async (trainer) => {
     const choice = await showMenu("NURSE JOY", [
       `Heal semua Pokemon di tim (${CONFIG.nurseHealCost === 0 ? "gratis" : formatMoney(CONFIG.nurseHealCost)})`,
       `Revive Pokemon pingsan (${formatMoney(CONFIG.nurseReviveCost)} per Pokemon)`,
+      `Revive SEMUA Pokemon pingsan (${trainer.party.filter(isFainted).length} pingsan = ${formatMoney(trainer.party.filter(isFainted).length * CONFIG.nurseReviveCost)})`,
     ]);
     switch (choice) {
       case 1:
@@ -26,6 +27,9 @@ export const nurseMenu = async (trainer) => {
         if (pokemon) printResult(revivePokemon(trainer, pokemon.uid));
         break;
       }
+      case 3:
+        printResult(reviveAll(trainer));
+        break;
       default:
         console.log("Nurse Joy: \"Kami harap bisa bertemu lagi!\"");
         return;

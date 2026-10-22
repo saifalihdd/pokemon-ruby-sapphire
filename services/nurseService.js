@@ -36,3 +36,19 @@ export const applyWhiteout = (trainer) => {
   trainer.party = trainer.party.map((p) => ({ ...p, hp: p.maxHp }));
   return { lost };
 };
+
+// Revive semua Pokemon pingsan di tim sekaligus (berbayar per Pokemon, HP kembali penuh).
+// Jika uang tidak cukup untuk semua, yang dihidupkan sebanyak yang mampu dibayar (urutan tim).
+export const reviveAll = (trainer) => {
+  const fainted = trainer.party.filter(isFainted);
+  if (fainted.length === 0) return fail("Tidak ada Pokemon pingsan di timmu.");
+  const affordable = Math.floor(trainer.money / CONFIG.nurseReviveCost);
+  if (affordable === 0) return fail(`Uang tidak cukup. Revive butuh ₽${CONFIG.nurseReviveCost} per Pokemon.`);
+
+  const revivedIds = fainted.slice(0, affordable).map((pokemon) => pokemon.uid);
+  const cost = revivedIds.length * CONFIG.nurseReviveCost;
+  trainer.money -= cost;
+  trainer.party = trainer.party.map((pokemon) => (revivedIds.includes(pokemon.uid) ? { ...pokemon, hp: pokemon.maxHp } : pokemon));
+  const remaining = fainted.length - revivedIds.length;
+  return ok(`${revivedIds.length} Pokemon dihidupkan kembali dengan HP penuh! (-₽${cost})${remaining > 0 ? ` ${remaining} Pokemon belum, uang tidak cukup.` : ""}`);
+};

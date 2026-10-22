@@ -5,6 +5,8 @@ import { formatMoney } from "../ui/display.js";
 import { CONFIG } from "../data/config.js";
 import { isEquipped } from "../services/equipmentService.js";
 import { countCaughtLegendaries } from "../services/legendaryService.js";
+import { getRewardProgress, claimPokedexRewards } from "../services/pokedexRewardService.js";
+import { findItem } from "../data/items.js";
 import { legendaries } from "../data/legendaries.js";
 
 export const showTrainerCard = (trainer) => {
@@ -40,4 +42,15 @@ export const showPokedex = (trainer) => {
       return `○ ${id} ??????`;
     });
   console.log(box(lines, { title: `POKEDEX  ● tangkap ◐ lihat ○ belum`, minWidth: 40 }));
+  const rewardLines = getRewardProgress(trainer).map(
+    (reward) => `${reward.claimed ? "✔" : "○"} ${String(reward.caught).padStart(2)} spesies → ${findItem(reward.itemId).name} x${reward.qty}${reward.claimed ? "" : `  (kurang ${Math.max(0, reward.caught - pokedexCaught.length)})`}`,
+  );
+  console.log(box(rewardLines, { title: `HADIAH POKEDEX  (tertangkap ${pokedexCaught.length})`, minWidth: 40 }));
+};
+
+// Memberi hadiah Pokedex yang baru tercapai dan mengumumkannya.
+export const announcePokedexRewards = (trainer) => {
+  claimPokedexRewards(trainer).forEach((reward) => {
+    console.log(`\n★ Hadiah Pokedex (${reward.caught} spesies tertangkap): ${findItem(reward.itemId).name} x${reward.qty}! ★`);
+  });
 };

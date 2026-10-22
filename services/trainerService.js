@@ -17,6 +17,7 @@ export const createTrainer = (name) => ({
   pokedexSeen: [],
   pokedexCaught: [],
   badges: [],
+  claimedRewards: [], // id hadiah Pokedex yang sudah diklaim
   equipped: [], // id item yang sedang dipasang ke trainer (mis. "expShare")
   nextUid: 1,
 });

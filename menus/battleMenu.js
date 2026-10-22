@@ -5,6 +5,7 @@ import { findItem } from "../data/items.js";
 import { CONFIG } from "../data/config.js";
 import { showMenu, printResult, pickPokemon } from "./menuHelper.js";
 import { handleEvolutions } from "./evolutionMenu.js";
+import { announcePokedexRewards } from "./infoMenu.js";
 import { resolveTurn, concludeBattle } from "../services/battleService.js";
 import { getBalls } from "../services/encounterService.js";
 import { renamePokemon } from "../services/trainerService.js";
@@ -138,6 +139,7 @@ export const runBattle = async (trainer, battle) => {
       break;
   }
   if (summary.outcome !== "lose") await handleEvolutions(trainer, battle.pendingEvolutions);
+  announcePokedexRewards(trainer);
   saveGame(trainer);
   return summary.outcome;
 };
