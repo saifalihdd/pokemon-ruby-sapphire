@@ -23,10 +23,12 @@ di Ruby & Sapphire. Dari sana kamu bisa:
   Pokemon di PC tidak. Saat **nonaktif**, hanya Pokemon yang bertarung yang dapat EXP.
 - **Lokasi Legendary** (terbuka setelah 8 badge): hadapi 8 legendary Gen 3 (Regirock, Regice, Registeel, Latias, Latios,
   Kyogre, Groudon, Rayquaza) di lokasi tetap dengan level tetap. Catch rate legendary hanya 3, jadi sangat sulit
-  ditangkap dengan Ball biasa. Menamatkan gym 8 memberi **Master Ball** (pasti tertangkap, hanya 1). Legendary yang
+  ditangkap dengan Ball biasa. **Master Ball** (pasti tertangkap) didapat dari gym 8 dan dari milestone Pokedex (30 dan 40 spesies tertangkap). Legendary yang
   pingsan sebelum tertangkap **hilang selamanya** (bisa dimatikan lewat `legendaryPermanent` di `config.js`);
   kabur tidak menghilangkannya. **Ultra Ball** (2x) dijual di Poke Mart.
-- **Pokemon Center**: kelola tim dan PC, heal gratis di Nurse Joy (revive berbayar), dan belanja.
+- **Hadiah Pokedex**: hadiah otomatis saat jumlah spesies tertangkap mencapai 15, 25, 30, dan 40 (Great Ball, Ultra Ball,
+  dan 2 Master Ball). Hanya 46 spesies non-legendary yang bisa didapat, jadi target dibuat realistis.
+- **Pokemon Center**: kelola tim dan PC, heal gratis di Nurse Joy (revive berbayar, satuan atau **Revive Semua** sekaligus), dan belanja.
 - **Whiteout**: jika semua Pokemon pingsan, uang berkurang separuh dan tim pulih.
 - **Autosave** ke `savegame.json` setelah setiap battle dan aksi menu.
 
@@ -61,18 +63,18 @@ Terminal VS Code disarankan agar warna dan karakter kotak tampil sempurna.
 pokemon-ruby-sapphire/
 ├── main.js                 # entry point (load/new game)
 ├── data/                   # data statis (Array of Objects)
-│   ├── pokedex.js  evolvedSpecies.js  legendarySpecies.js  legendaries.js  evolutions.js
+│   ├── pokedex.js  evolvedSpecies.js  legendarySpecies.js  legendaries.js  pokedexRewards.js  evolutions.js
 │   ├── moves.js    typeChart.js        items.js
 │   ├── gyms.js     areas.js            config.js
 ├── services/               # logika murni (tanpa console.log): CRUD & battle
 │   ├── trainerService.js   inventoryService.js   shopService.js
 │   ├── nurseService.js     encounterService.js   battleService.js
 │   ├── levelingService.js  evolutionService.js   rewardService.js
-│   ├── gymService.js       equipmentService.js   legendaryService.js   pokemonFactory.js
+│   ├── gymService.js       equipmentService.js   legendaryService.js   pokedexRewardService.js   pokemonFactory.js
 ├── menus/                  # alur menu & I/O terminal
 ├── ui/                     # warna, HP bar, kotak, animasi
 ├── utils/                  # input (readline), storage (JSON), validasi, RNG
-└── test/                   # tes otomatis (stage1 s/d stage4)
+└── test/                   # tes otomatis (stage1 s/d stage5)
 ```
 
 Pemisahan `services/` (logika) dan `menus/` (input/output) membuat logika bisa dites tanpa terminal.
@@ -92,6 +94,7 @@ Semua data utama berupa **Array of Objects**.
   pokedexSeen: [252, 263], pokedexCaught: [252],
   badges: ["Stone Badge"], equipped: ["expShare"],
   legendaries: { groudon: "caught" }, // "caught" | "defeated"; kosong = belum ditemui
+  claimedRewards: ["dex15"],          // id hadiah Pokedex yang sudah diklaim
   nextUid: 3
 }
 ```
@@ -136,8 +139,9 @@ Semua data utama berupa **Array of Objects**.
 | **Update** | `updatePokemon`, `renamePokemon`, `swapParty` | Mengubah data Pokemon (immutable: objek baru lewat spread) |
 | | `equipItem`, `unequipItem`, `toggleEquip` (equipmentService) | Memasang/melepas item ke trainer (Exp. Share); mengubah `trainer.equipped` |
 | | `depositPokemon`, `withdrawPokemon` | Memindahkan Pokemon antara tim dan PC |
-| | `healParty`, `revivePokemon`, `useItemOnPokemon` | Memulihkan HP, menghidupkan, memakai item |
+| | `healParty`, `revivePokemon`, `reviveAll`, `useItemOnPokemon` | Memulihkan HP, menghidupkan, memakai item |
 | | `markLegendary` (battleService), `startLegendaryBattle` (legendaryService) | Mencatat legendary tertangkap / hilang di data trainer |
+| | `claimPokedexRewards` (pokedexRewardService) | Menambah hadiah milestone Pokedex ke tas dan mencatatnya di `claimedRewards` |
 | | `grantExp`, `evolvePokemon` | Menambah EXP, naik level, dan berevolusi |
 | | `sellItem`, `applyReward` | Mengubah uang dan isi tas |
 | **Delete** | `releasePokemon` | Melepas Pokemon (tim tidak boleh kosong) |
