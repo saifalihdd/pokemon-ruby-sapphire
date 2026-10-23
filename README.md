@@ -28,6 +28,9 @@ di Ruby & Sapphire. Dari sana kamu bisa:
   kabur tidak menghilangkannya. **Ultra Ball** (2x) dijual di Poke Mart.
 - **Hadiah Pokedex**: hadiah otomatis saat jumlah spesies tertangkap mencapai 15, 25, 30, dan 40 (Great Ball, Ultra Ball,
   dan 2 Master Ball). Hanya 46 spesies non-legendary yang bisa didapat, jadi target dibuat realistis.
+- **Musik (opsional)**: lagu latar per suasana (menu, jelajah, Pokemon Center, battle liar/gym/legendary) dan jingle
+  (menang, tangkap, evolusi, whiteout). Tanpa library: memakai pemutar bawaan sistem (Windows PowerShell, macOS `afplay`,
+  Linux `ffplay`/`mpg123`). Tanpa file musik, game tetap berjalan senyap. Lihat `assets/music/README.md`.
 - **Pokemon Center**: kelola tim dan PC, heal gratis di Nurse Joy (revive berbayar, satuan atau **Revive Semua** sekaligus), dan belanja.
 - **Whiteout**: jika semua Pokemon pingsan, uang berkurang separuh dan tim pulih.
 - **Autosave** ke `savegame.json` setelah setiap battle dan aksi menu.
@@ -53,6 +56,8 @@ Opsional (variabel lingkungan):
 | Variabel | Fungsi |
 |---|---|
 | `NO_COLOR=1` | Matikan warna ANSI |
+| `MUSIC=off` | Matikan musik (juga bisa lewat menu utama) |
+| `MUSIC_VOLUME=0.3` | Volume musik 0.0 - 1.0 (default 0.5) |
 | `TEXT_DELAY=0` | Matikan jeda animasi (default 600 ms) |
 
 Terminal VS Code disarankan agar warna dan karakter kotak tampil sempurna.
@@ -72,9 +77,10 @@ pokemon-ruby-sapphire/
 │   ├── levelingService.js  evolutionService.js   rewardService.js
 │   ├── gymService.js       equipmentService.js   legendaryService.js   pokedexRewardService.js   pokemonFactory.js
 ├── menus/                  # alur menu & I/O terminal
-├── ui/                     # warna, HP bar, kotak, animasi
+├── ui/                     # warna, HP bar, kotak, animasi, pemutar musik (audio.js)
 ├── utils/                  # input (readline), storage (JSON), validasi, RNG
-└── test/                   # tes otomatis (stage1 s/d stage5)
+├── assets/music/           # file musik opsional (nama file di assets/music/README.md)
+└── test/                   # tes otomatis (stage1 s/d stage6)
 ```
 
 Pemisahan `services/` (logika) dan `menus/` (input/output) membuat logika bisa dites tanpa terminal.
