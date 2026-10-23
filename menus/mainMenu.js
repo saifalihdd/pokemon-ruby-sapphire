@@ -6,12 +6,24 @@ import { gymMenu } from "./gymMenu.js";
 import { legendaryMenu } from "./legendaryMenu.js";
 import { showTrainerCard, showPokedex, announcePokedexRewards } from "./infoMenu.js";
 import { saveGame } from "../utils/storage.js";
+import { audio } from "../ui/audio.js";
 
 export const mainMenu = async (trainer) => {
   while (true) {
+    audio.playMusic("town");
     const choice = await showMenu(
       `MENU UTAMA - ${trainer.name}`,
-      ["Jelajah (cari Pokemon liar)", "Tantang Gym", "Lokasi Legendary (butuh 8 badge)", "Pokemon Center", "Trainer Card", "Tas", "Pokedex", "Simpan game"],
+      [
+        "Jelajah (cari Pokemon liar)",
+        "Tantang Gym",
+        "Lokasi Legendary (butuh 8 badge)",
+        "Pokemon Center",
+        "Trainer Card",
+        "Tas",
+        "Pokedex",
+        "Simpan game",
+        `Musik: ${audio.isEnabled() ? "ON" : "OFF"} (ubah)`,
+      ],
       "Simpan & Keluar",
     );
     switch (choice) {
@@ -40,6 +52,10 @@ export const mainMenu = async (trainer) => {
       case 8:
         saveGame(trainer);
         console.log("✔ Game tersimpan.");
+        break;
+      case 9:
+        if (audio.isBroken()) console.log("✖ Musik tidak tersedia di perangkat ini (pemutar tidak ditemukan).");
+        else console.log(`✔ Musik ${audio.setEnabled(!audio.isEnabled()) ? "dinyalakan" : "dimatikan"}.`);
         break;
       default:
         saveGame(trainer);

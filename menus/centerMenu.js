@@ -2,10 +2,12 @@ import { showMenu } from "./menuHelper.js";
 import { manageMenu } from "./manageMenu.js";
 import { nurseMenu } from "./nurseMenu.js";
 import { shopMenu } from "./shopMenu.js";
+import { audio } from "../ui/audio.js";
 
 // Pokemon Center = hub: kelola Pokemon, Nurse Joy, dan Poke Mart.
 export const centerMenu = async (trainer) => {
   while (true) {
+    audio.playMusic("pokemonCenter");
     const choice = await showMenu("POKEMON CENTER", ["Kelola Pokemon (tim & PC)", "Nurse Joy (heal / revive)", "Poke Mart (beli / jual)"]);
     switch (choice) {
       case 1:

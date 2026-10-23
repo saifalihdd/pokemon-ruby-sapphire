@@ -14,6 +14,11 @@ export const CONFIG = {
   nicknameMaxLength: 12,
   textDelayMs: Number(process.env.TEXT_DELAY ?? 600), // jeda animasi (0 = instan)
   saveFile: "savegame.json",
+  // --- musik (opsional; game tetap jalan tanpa file musik)
+  music: {
+    enabled: process.env.MUSIC !== "off", // MUSIC=off untuk mematikan
+    volume: Math.min(1, Math.max(0, Number(process.env.MUSIC_VOLUME ?? 0.5))), // 0.0 - 1.0
+  },
   // --- battle & ekonomi (Tahap 2)
   legendaryMinBadges: 8, // badge minimal untuk membuka Lokasi Legendary
   legendaryPermanent: true, // true: legendary yang dikalahkan (pingsan) sebelum ditangkap hilang selamanya

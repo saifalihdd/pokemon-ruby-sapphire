@@ -5,6 +5,7 @@ import { showMenu, printResult } from "./menuHelper.js";
 import { listLegendaries, startLegendaryBattle, isLegendaryAreaUnlocked } from "../services/legendaryService.js";
 import { runBattle } from "./battleMenu.js";
 import { typeTag } from "../ui/colors.js";
+import { audio } from "../ui/audio.js";
 
 const STATUS_LABEL = { available: "(siap ditemui)", caught: "(TERTANGKAP ★)", defeated: "(menghilang selamanya)" };
 
@@ -14,6 +15,7 @@ export const legendaryMenu = async (trainer) => {
     return;
   }
   while (true) {
+    audio.playMusic("town");
     const entries = listLegendaries(trainer);
     const options = entries.map(({ legendary, status }) => {
       const species = findSpecies(legendary.speciesId);

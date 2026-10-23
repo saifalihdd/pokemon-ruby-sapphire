@@ -7,6 +7,7 @@ import { box } from "../ui/boxes.js";
 import { bold, typeTag } from "../ui/colors.js";
 import { pause } from "../ui/animations.js";
 import { printResult } from "./menuHelper.js";
+import { audio } from "../ui/audio.js";
 
 // Menawarkan evolusi untuk daftar uid. Pemain boleh membatalkan (seperti menekan B di game asli).
 export const handleEvolutions = async (trainer, uids) => {
@@ -22,6 +23,7 @@ export const handleEvolutions = async (trainer, uids) => {
         console.log(`${displayName(pokemon)} berhenti berevolusi.`);
         break;
       }
+      audio.playJingle("evolution");
       for (let i = 0; i < 3; i++) {
         console.log("   . . .");
         await pause(0.7);

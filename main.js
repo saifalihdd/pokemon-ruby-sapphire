@@ -5,6 +5,7 @@ import { runNewGame } from "./menus/introMenu.js";
 import { mainMenu } from "./menus/mainMenu.js";
 import { box } from "./ui/boxes.js";
 import { bold } from "./ui/colors.js";
+import { audio } from "./ui/audio.js";
 
 const printBanner = () => {
   console.log(box(["", `   ${bold("P O K E M O N   R U B Y  &  S A P P H I R E")}`, "   Versi CLI - Mini Project TSC Backend Basic", ""], { minWidth: 44 }));
@@ -12,6 +13,7 @@ const printBanner = () => {
 
 const start = async () => {
   printBanner();
+  audio.playMusic("title");
   let trainer = null;
 
   if (hasSave()) {
@@ -33,6 +35,7 @@ const start = async () => {
 
   if (!trainer) trainer = await runNewGame();
   await mainMenu(trainer);
+  audio.stopAll();
   closeInput();
 };
 

@@ -5,11 +5,13 @@ import { runBattle } from "./battleMenu.js";
 import { typeTag } from "../ui/colors.js";
 import { box } from "../ui/boxes.js";
 import { findSpecies } from "../data/pokedex.js";
+import { audio } from "../ui/audio.js";
 
 const statusIcon = ({ beaten, unlocked }) => (beaten ? "●" : unlocked ? "○" : "✖");
 
 export const gymMenu = async (trainer) => {
   while (true) {
+    audio.playMusic("town");
     const entries = listGyms(trainer);
     const options = entries.map((entry) => {
       const { gym } = entry;

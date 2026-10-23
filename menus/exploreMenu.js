@@ -6,6 +6,7 @@ import { registerSeen, hasUsablePokemon } from "../services/trainerService.js";
 import { createBattle } from "../services/battleService.js";
 import { runBattle } from "./battleMenu.js";
 import { pause } from "../ui/animations.js";
+import { audio } from "../ui/audio.js";
 
 export const exploreMenu = async (trainer) => {
   if (!hasUsablePokemon(trainer)) {
@@ -21,6 +22,7 @@ export const exploreMenu = async (trainer) => {
   const area = unlocked[choice - 1];
 
   while (true) {
+    audio.playMusic("route");
     console.log(`\nKamu berjalan di rumput tinggi ${area.name}...`);
     await pause();
     const wild = rollWildPokemon(area.id);

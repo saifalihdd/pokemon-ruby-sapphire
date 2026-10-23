@@ -15,6 +15,7 @@ import { saveGame } from "../utils/storage.js";
 import { renderBattle } from "../ui/battleScreen.js";
 import { typeTag } from "../ui/colors.js";
 import { pause, playCatchAnimation } from "../ui/animations.js";
+import { audio } from "../ui/audio.js";
 
 const printEvents = async (events) => {
   for (const event of events) {
@@ -93,6 +94,7 @@ const offerNickname = async (trainer, pokemon) => {
 
 // Menjalankan satu battle sampai selesai. Mengembalikan hasil akhir ("win" | "lose" | "caught" | "ran").
 export const runBattle = async (trainer, battle) => {
+  audio.playMusic(battle.legendaryId ? "battleLegendary" : battle.kind === "trainer" ? "battleGym" : "battleWild");
   if (battle.legendaryId) {
     console.log(`\nAura luar biasa memenuhi udara... ${findSpecies(battle.foe.speciesId).name} legendaris muncul!`);
   } else if (battle.kind === "wild") {
@@ -118,6 +120,7 @@ export const runBattle = async (trainer, battle) => {
 
   const summary = concludeBattle(battle, trainer);
   saveGame(trainer); // autosave tepat setelah battle: hadiah/badge/whiteout langsung aman
+  audio.playJingle({ win: "victory", caught: "catch", lose: "whiteout" }[summary.outcome]);
   switch (summary.outcome) {
     case "win":
       console.log(battle.kind === "wild" ? "\n★ Kamu menang! ★" : `\n★ Kamu mengalahkan ${battle.foeName}! ★`);
