@@ -6,6 +6,6 @@
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-    "test": "node test/stage1.test.js && node test/stage2.test.js && node test/stage3.test.js && node test/stage4.test.js && node test/stage5.test.js && node test/stage6.test.js"
+    "test": "node test/stage1.test.js && node test/stage2.test.js && node test/stage3.test.js && node test/stage4.test.js && node test/stage5.test.js && node test/stage6.test.js && node test/stage7.test.js"
   }
 }
