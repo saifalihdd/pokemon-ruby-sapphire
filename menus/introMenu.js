@@ -6,6 +6,7 @@ import { createTrainer, addPokemon, renamePokemon } from "../services/trainerSer
 import { printPokemonDetail } from "../ui/display.js";
 import { printResult } from "./menuHelper.js";
 import { pause } from "../ui/animations.js";
+import { getSpriteRows, joinBlocks } from "../ui/sprite.js";
 
 const askTrainerName = async () => {
   while (true) {
@@ -19,6 +20,11 @@ const chooseStarter = async () => {
   const starters = getStarters();
   while (true) {
     console.log("\nProf. Birch: \"Ada tiga Pokemon di tas ini. Pilih satu sebagai partnermu!\"");
+    const art = joinBlocks(starters.map((species) => getSpriteRows(species.id)), { gap: 4 });
+    if (art.length > 0) {
+      console.log(`\n${art.join("\n")}`);
+      console.log(starters.map((species) => species.name.padEnd(16)).join("    "));
+    }
     starters.forEach((species, index) => console.log(` ${index + 1}. ${species.name} (${species.type.join("/")})`));
     const choice = await askNumber("> Pilih starter (1-3): ", 1, starters.length);
     const species = starters[choice - 1];

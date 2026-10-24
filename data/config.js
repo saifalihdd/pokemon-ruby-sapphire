@@ -14,6 +14,8 @@ export const CONFIG = {
   nicknameMaxLength: 12,
   textDelayMs: Number(process.env.TEXT_DELAY ?? 600), // jeda animasi (0 = instan)
   saveFile: "savegame.json",
+  // --- sprite pixel-art (SPRITES=off untuk mematikan, mis. di terminal tanpa dukungan warna 24-bit)
+  sprites: { enabled: process.env.SPRITES !== "off" },
   // --- musik (opsional; game tetap jalan tanpa file musik)
   music: {
     enabled: process.env.MUSIC !== "off", // MUSIC=off untuk mematikan

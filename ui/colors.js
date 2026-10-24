@@ -1,6 +1,7 @@
 // Warna ANSI truecolor (didukung terminal VS Code). Set NO_COLOR=1 untuk mematikan warna.
 const useColor = !process.env.NO_COLOR;
 
+export const colorEnabled = useColor;
 export const RESET = useColor ? "\x1b[0m" : "";
 export const paint = (text, [r, g, b]) => (useColor ? `\x1b[38;2;${r};${g};${b}m${text}${RESET}` : text);
 export const bold = (text) => (useColor ? `\x1b[1m${text}\x1b[22m` : text);

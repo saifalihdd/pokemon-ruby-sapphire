@@ -4,6 +4,7 @@ import { getEvolutionTarget, evolvePokemon } from "../services/evolutionService.
 import { displayName } from "../services/pokemonFactory.js";
 import { findMove } from "../data/moves.js";
 import { box } from "../ui/boxes.js";
+import { getSpriteRows, joinBlocks } from "../ui/sprite.js";
 import { bold, typeTag } from "../ui/colors.js";
 import { pause } from "../ui/animations.js";
 import { printResult } from "./menuHelper.js";
@@ -31,11 +32,13 @@ export const handleEvolutions = async (trainer, uids) => {
       const result = evolvePokemon(trainer, uid);
       printResult(result);
       if (result.ok) {
-        const { to } = result;
+        const { from, to } = result;
+        const art = joinBlocks([getSpriteRows(from.id), ["", "", "  ───►  ", ""], getSpriteRows(to.id)], { gap: 1, align: "center" });
+        if (art.length > 0) console.log(box(art, { title: "EVOLUSI!", minWidth: 44 }));
         console.log(box([`${bold(displayName(locatePokemon(trainer, uid).pokemon))}  ${to.type.map((type) => typeTag(type)).join("")}`,
           `Stat dasar baru: HP ${to.baseStats.hp}  ATK ${to.baseStats.atk}  DEF ${to.baseStats.def}`,
           `                 SpA ${to.baseStats.spAtk}  SpD ${to.baseStats.spDef}  SPD ${to.baseStats.speed}`,
-          `Move baru: ${to.moves.map((id) => findMove(id).name).join(", ")}`], { title: "EVOLUSI!", minWidth: 44 }));
+          `Move baru: ${to.moves.map((id) => findMove(id).name).join(", ")}`], { title: "Pokemon baru", minWidth: 44 }));
       }
       await pause();
     }

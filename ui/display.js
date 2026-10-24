@@ -4,6 +4,7 @@ import { displayName } from "../services/pokemonFactory.js";
 import { typeTag, bold, dim } from "./colors.js";
 import { hpBar } from "./bars.js";
 import { box } from "./boxes.js";
+import { getSpriteRows, joinBlocks } from "./sprite.js";
 
 export const formatMoney = (amount) => `₽${amount}`;
 
@@ -35,5 +36,6 @@ export const printPokemonDetail = (pokemon) => {
     "Move  :",
     ...moveLines,
   ];
-  console.log(box(lines, { title: "Detail Pokemon", minWidth: 50 }));
+  const header = joinBlocks([getSpriteRows(pokemon.speciesId), lines.slice(0, 4)], { gap: 3, align: "center" });
+  console.log(box([...header, ...lines.slice(4)], { title: "Detail Pokemon", minWidth: 50 }));
 };
