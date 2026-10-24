@@ -28,6 +28,10 @@ di Ruby & Sapphire. Dari sana kamu bisa:
   kabur tidak menghilangkannya. **Ultra Ball** (2x) dijual di Poke Mart.
 - **Hadiah Pokedex**: hadiah otomatis saat jumlah spesies tertangkap mencapai 15, 25, 30, dan 40 (Great Ball, Ultra Ball,
   dan 2 Master Ball). Hanya 46 spesies non-legendary yang bisa didapat, jadi target dibuat realistis.
+- **Sprite pixel-art**: seluruh 60 spesies punya sprite 16x16 buatan sendiri (bukan sprite resmi), digambar di terminal
+  dengan karakter setengah-blok dan warna 24-bit. Tampil di layar battle (lawan di kanan, Pokemon kita menghadap kanan di
+  kiri), pemilihan starter, detail Pokemon, dan evolusi (sebelum → sesudah). Spesies tanpa sprite otomatis memakai bola
+  berwarna sesuai tipe. Matikan dengan `SPRITES=off` (mis. di terminal tanpa warna 24-bit).
 - **Musik (opsional)**: lagu latar per suasana (menu, jelajah, Pokemon Center, battle liar/gym/legendary) dan jingle
   (menang, tangkap, evolusi, whiteout). Tanpa library: memakai pemutar bawaan sistem (Windows PowerShell, macOS `afplay`,
   Linux `ffplay`/`mpg123`). Tanpa file musik, game tetap berjalan senyap. Lihat `assets/music/README.md`.
@@ -56,6 +60,7 @@ Opsional (variabel lingkungan):
 | Variabel | Fungsi |
 |---|---|
 | `NO_COLOR=1` | Matikan warna ANSI |
+| `SPRITES=off` | Matikan sprite (tampilan teks saja) |
 | `MUSIC=off` | Matikan musik (juga bisa lewat menu utama) |
 | `MUSIC_VOLUME=0.3` | Volume musik 0.0 - 1.0 (default 0.5) |
 | `TEXT_DELAY=0` | Matikan jeda animasi (default 600 ms) |
@@ -68,7 +73,7 @@ Terminal VS Code disarankan agar warna dan karakter kotak tampil sempurna.
 pokemon-ruby-sapphire/
 ├── main.js                 # entry point (load/new game)
 ├── data/                   # data statis (Array of Objects)
-│   ├── pokedex.js  evolvedSpecies.js  legendarySpecies.js  legendaries.js  pokedexRewards.js  evolutions.js
+│   ├── sprites.js  pokedex.js  evolvedSpecies.js  legendarySpecies.js  legendaries.js  pokedexRewards.js  evolutions.js
 │   ├── moves.js    typeChart.js        items.js
 │   ├── gyms.js     areas.js            config.js
 ├── services/               # logika murni (tanpa console.log): CRUD & battle
@@ -77,10 +82,10 @@ pokemon-ruby-sapphire/
 │   ├── levelingService.js  evolutionService.js   rewardService.js
 │   ├── gymService.js       equipmentService.js   legendaryService.js   pokedexRewardService.js   pokemonFactory.js
 ├── menus/                  # alur menu & I/O terminal
-├── ui/                     # warna, HP bar, kotak, animasi, pemutar musik (audio.js)
+├── ui/                     # warna, HP bar, kotak, animasi, pemutar musik (audio.js), renderer sprite (sprite.js)
 ├── utils/                  # input (readline), storage (JSON), validasi, RNG
 ├── assets/music/           # file musik opsional (nama file di assets/music/README.md)
-└── test/                   # tes otomatis (stage1 s/d stage6)
+└── test/                   # tes otomatis (stage1 s/d stage7)
 ```
 
 Pemisahan `services/` (logika) dan `menus/` (input/output) membuat logika bisa dites tanpa terminal.
